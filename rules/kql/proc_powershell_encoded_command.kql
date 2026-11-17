@@ -1,0 +1,6 @@
+// GENERATED FILE - do not edit by hand.
+// Source: rules/sigma/proc_powershell_encoded_command.yml
+// Regenerate with: python tools/convert_sigma.py
+// Rule: PowerShell Launched With an Encoded Command (f1519496-36a9-45d1-80b2-62bd36161cfa)
+DeviceProcessEvents
+| where (FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe") and (ProcessCommandLine contains " -enc " or ProcessCommandLine contains " -enco " or ProcessCommandLine contains " -encodedcommand " or ProcessCommandLine contains " -ec " or ProcessCommandLine contains " /enc " or ProcessCommandLine contains " /encodedcommand ")

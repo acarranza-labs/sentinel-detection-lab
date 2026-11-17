@@ -1,0 +1,48 @@
+id: 75b586ef-4508-4cab-8113-58d4f62772bc
+name: External Teams Chat Impersonating IT Support
+description: |
+  A Teams chat is created with a user from another tenant whose name looks like
+  IT support or a help desk. Groups such as Storm-1811 first flood the victim's
+  mailbox with spam (email bombing), then contact them on Teams posing as the
+  help desk and ask them to start a remote-support session.
+severity: Medium
+kind: Scheduled
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - CloudAppEvents
+queryFrequency: 1h
+queryPeriod: 1h
+triggerOperator: gt
+triggerThreshold: 0
+tactics:
+  - InitialAccess
+  - DefenseEvasion
+relevantTechniques:
+  - T1566.003
+  - T1656
+query: |
+  let lookback = 1h;
+  let support_names = dynamic(["help desk", "helpdesk", "service desk", "it support",
+      "tech support", "soporte", "microsoft support", "security team"]);
+  CloudAppEvents
+  | where TimeGenerated > ago(lookback)
+  | where Application =~ "Microsoft Teams"
+  | where ActionType == "ChatCreated"
+  | extend Raw = parse_json(RawEventData)
+  | extend HasForeignTenantUsers = tobool(Raw.ParticipantInfo.HasForeignTenantUsers),
+           ChatName = tostring(Raw.ChatName),
+           Members = Raw.Members
+  | where HasForeignTenantUsers == true
+  | mv-expand Member = Members
+  | extend MemberName = tostring(Member.DisplayName), MemberUpn = tostring(Member.UPN)
+  | where MemberName has_any (support_names) or ChatName has_any (support_names)
+  | summarize ExternalMembers = make_set(strcat(MemberName, " <", MemberUpn, ">"), 10),
+              ChatNames = make_set(ChatName, 5)
+      by TimeGenerated, InternalUser = AccountDisplayName, AccountObjectId
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: AadUserId
+        columnName: AccountObjectId
+version: 1.0.0

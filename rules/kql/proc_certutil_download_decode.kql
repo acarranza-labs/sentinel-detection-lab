@@ -1,0 +1,6 @@
+// GENERATED FILE - do not edit by hand.
+// Source: rules/sigma/proc_certutil_download_decode.yml
+// Regenerate with: python tools/convert_sigma.py
+// Rule: Certutil Used to Download or Decode a File (054ab7f3-e9d1-469e-8f3d-58c5a4c6deca)
+DeviceProcessEvents
+| where FolderPath endswith "\\certutil.exe" and (ProcessCommandLine contains "urlcache" or ProcessCommandLine contains "verifyctl" or ProcessCommandLine contains "-decode" or ProcessCommandLine contains "/decode" or ProcessCommandLine contains "-decodehex" or ProcessCommandLine contains "/decodehex")

@@ -1,0 +1,21 @@
+{
+  "_comment": "Recorded-style answers for offline demos. Values are illustrative, not real intelligence.",
+  "ipAddress=203.0.113.45": {
+    "data": {
+      "abuseConfidenceScore": 100,
+      "totalReports": 412,
+      "countryCode": "NL",
+      "isp": "Example Bulletproof Hosting",
+      "usageType": "Data Center/Web Hosting/Transit"
+    }
+  },
+  "ipAddress=198.51.100.23": {
+    "data": {
+      "abuseConfidenceScore": 0,
+      "totalReports": 0,
+      "countryCode": "ES",
+      "isp": "Example Mobile ISP",
+      "usageType": "Mobile ISP"
+    }
+  }
+}

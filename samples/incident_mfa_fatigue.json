@@ -1,0 +1,17 @@
+{
+  "name": "8d3f2a51-0c7e-4b8e-9a51-2f6c1d0e7b11",
+  "properties": {
+    "incidentNumber": 4127,
+    "title": "MFA Fatigue - Repeated MFA Denials Followed by a Successful Sign-in",
+    "severity": "High",
+    "status": "New",
+    "description": "User received 9 MFA prompts in 20 minutes and approved the last one.",
+    "additionalData": { "alertsCount": 1 }
+  },
+  "entities": [
+    { "kind": "Account", "properties": { "accountName": "laura.gomez", "upnSuffix": "contoso.example", "aadUserId": "5b1e7a0c-2f4d-4c1e-9d3a-7c2b8e6f1a90" } },
+    { "kind": "Ip", "properties": { "address": "203.0.113.45" } },
+    { "kind": "Ip", "properties": { "address": "198.51.100.23" } },
+    { "kind": "Ip", "properties": { "address": "10.20.4.17" } }
+  ]
+}

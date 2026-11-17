@@ -1,0 +1,44 @@
+title: Office Application Spawning a Script Interpreter or Shell
+id: c708ae76-55b1-4654-bce2-0e91c8734490
+status: experimental
+description: |
+  Detects Microsoft Office applications launching a command shell or script
+  interpreter. This is a common pattern after a user opens a malicious document
+  delivered by phishing (macro, embedded object or exploit).
+references:
+  - https://attack.mitre.org/techniques/T1204/002/
+  - https://attack.mitre.org/techniques/T1566/001/
+author: Antonio Carranza
+date: 2026-11-17
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - attack.t1059
+  - attack.initial-access
+  - attack.t1566.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_parent:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\OUTLOOK.EXE'
+      - '\MSACCESS.EXE'
+      - '\MSPUB.EXE'
+  selection_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+  condition: all of selection_*
+falsepositives:
+  - Legitimate add-ins or business macros that call scripts. Baseline per environment and exclude by signed add-in path or command line.
+level: high

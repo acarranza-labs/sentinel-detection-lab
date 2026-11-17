@@ -1,0 +1,4 @@
+PyYAML==6.0.3
+pySigma==1.5.1
+pySigma-backend-kusto==1.0.1
+anthropic==2.9.0

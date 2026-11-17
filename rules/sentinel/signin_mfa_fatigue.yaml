@@ -1,0 +1,46 @@
+id: 95a11318-9371-434f-b4dd-c7806335d831
+name: MFA Fatigue - Repeated MFA Denials Followed by a Successful Sign-in
+description: |
+  A user rejects or ignores several MFA prompts in a short period. This is the
+  pattern of an attacker who already has the password and floods the user with
+  push notifications until one is accepted. A success after the denials is
+  reported in SucceededAfterPrompts and should be handled as a likely compromise.
+severity: High
+kind: Scheduled
+requiredDataConnectors:
+  - connectorId: AzureActiveDirectory
+    dataTypes:
+      - SigninLogs
+queryFrequency: 30m
+queryPeriod: 1h
+triggerOperator: gt
+triggerThreshold: 0
+tactics:
+  - CredentialAccess
+relevantTechniques:
+  - T1621
+query: |
+  let lookback = 1h;
+  let min_mfa_failures = 5;
+  // 500121: authentication failed during the strong authentication (MFA) request.
+  SigninLogs
+  | where TimeGenerated > ago(lookback)
+  | where ResultType in ("500121", "0")
+  | summarize
+      MfaFailures = countif(ResultType == "500121"),
+      FirstMfaFailure = minif(TimeGenerated, ResultType == "500121"),
+      LastSuccess = maxif(TimeGenerated, ResultType == "0"),
+      SourceIPs = make_set(IPAddress, 20),
+      Locations = make_set(tostring(LocationDetails.countryOrRegion), 10),
+      Apps = make_set(AppDisplayName, 10)
+      by UserPrincipalName
+  | where MfaFailures >= min_mfa_failures
+  | extend SucceededAfterPrompts = isnotnull(LastSuccess) and LastSuccess > FirstMfaFailure
+  | project UserPrincipalName, MfaFailures, FirstMfaFailure, LastSuccess,
+            SucceededAfterPrompts, SourceIPs, Locations, Apps
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: UserPrincipalName
+version: 1.0.0

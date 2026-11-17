@@ -1,0 +1,62 @@
+id: a70341c5-4829-4d3d-af0c-c23788ba937d
+name: Suspicious Inbox Rule - Forwarding or Hiding Mail (BEC)
+description: |
+  An inbox rule is created or changed to forward mail outside the mailbox, or to
+  delete or hide messages that mention payments, invoices or security. After a
+  mailbox takeover, business email compromise (BEC) actors use these rules to
+  read the conversation and to hide replies from the real owner.
+severity: Medium
+kind: Scheduled
+requiredDataConnectors:
+  - connectorId: Office365
+    dataTypes:
+      - OfficeActivity
+queryFrequency: 1h
+queryPeriod: 1h
+triggerOperator: gt
+triggerThreshold: 0
+tactics:
+  - DefenseEvasion
+  - Collection
+relevantTechniques:
+  - T1564.008
+  - T1114.003
+query: |
+  let lookback = 1h;
+  let bait_words = dynamic(["invoice", "payment", "transfer", "bank", "iban",
+      "factura", "pago", "transferencia", "password", "security", "phish", "hacked"]);
+  let hiding_folders = dynamic(["RSS Feeds", "RSS Subscriptions", "Archive",
+      "Conversation History", "Deleted Items", "Junk Email"]);
+  OfficeActivity
+  | where TimeGenerated > ago(lookback)
+  | where OfficeWorkload =~ "Exchange"
+  | where Operation in~ ("New-InboxRule", "Set-InboxRule")
+  | mv-expand Param = parse_json(Parameters)
+  | summarize RuleParams = make_bag(bag_pack(tostring(Param.Name), tostring(Param.Value)))
+      by TimeGenerated, UserId, ClientIP, Operation, OfficeObjectId
+  | extend
+      ForwardTarget = coalesce(tostring(RuleParams.ForwardTo),
+                               tostring(RuleParams.ForwardAsAttachmentTo),
+                               tostring(RuleParams.RedirectTo)),
+      DeletesMail = tostring(RuleParams.DeleteMessage) =~ "True",
+      MoveToFolder = tostring(RuleParams.MoveToFolder),
+      Keywords = strcat(tostring(RuleParams.SubjectContainsWords), " ",
+                        tostring(RuleParams.SubjectOrBodyContainsWords), " ",
+                        tostring(RuleParams.BodyContainsWords))
+  | extend
+      Forwards = isnotempty(ForwardTarget),
+      HidesMail = DeletesMail or MoveToFolder has_any (hiding_folders),
+      HasBaitKeyword = Keywords has_any (bait_words)
+  | where Forwards or (HidesMail and HasBaitKeyword)
+  | project TimeGenerated, UserId, ClientIP, Operation, RuleName = OfficeObjectId,
+            ForwardTarget, DeletesMail, MoveToFolder, Keywords
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: UserId
+  - entityType: IP
+    fieldMappings:
+      - identifier: Address
+        columnName: ClientIP
+version: 1.0.0

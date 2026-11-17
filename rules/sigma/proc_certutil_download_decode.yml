@@ -1,0 +1,35 @@
+title: Certutil Used to Download or Decode a File
+id: 054ab7f3-e9d1-469e-8f3d-58c5a4c6deca
+status: experimental
+description: |
+  Detects certutil.exe used to fetch a remote file or to decode base64/hex
+  content. Both are classic "living off the land" ways to bring a payload onto
+  a host without a dedicated download tool.
+references:
+  - https://attack.mitre.org/techniques/T1105/
+  - https://attack.mitre.org/techniques/T1140/
+author: Antonio Carranza
+date: 2026-11-17
+tags:
+  - attack.command-and-control
+  - attack.t1105
+  - attack.defense-evasion
+  - attack.t1140
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_image:
+    Image|endswith: '\certutil.exe'
+  selection_args:
+    CommandLine|contains:
+      - 'urlcache'
+      - 'verifyctl'
+      - '-decode'
+      - '/decode'
+      - '-decodehex'
+      - '/decodehex'
+  condition: all of selection_*
+falsepositives:
+  - Administrators decoding certificates. Downloads from the internet with certutil are rarely legitimate.
+level: high

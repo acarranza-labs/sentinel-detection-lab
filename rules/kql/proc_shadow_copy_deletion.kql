@@ -1,0 +1,6 @@
+// GENERATED FILE - do not edit by hand.
+// Source: rules/sigma/proc_shadow_copy_deletion.yml
+// Regenerate with: python tools/convert_sigma.py
+// Rule: Volume Shadow Copy Deletion or Resize (a0c0d959-e33e-4263-b32a-14a7c7289535)
+DeviceProcessEvents
+| where (FolderPath endswith "\\vssadmin.exe" and (ProcessCommandLine contains "delete shadows" or ProcessCommandLine contains "resize shadowstorage")) or (FolderPath endswith "\\wmic.exe" and (ProcessCommandLine contains "shadowcopy" and ProcessCommandLine contains "delete")) or (FolderPath endswith "\\wbadmin.exe" and ProcessCommandLine contains "delete catalog")

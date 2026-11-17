@@ -1,0 +1,6 @@
+// GENERATED FILE - do not edit by hand.
+// Source: rules/sigma/proc_office_spawns_script_interpreter.yml
+// Regenerate with: python tools/convert_sigma.py
+// Rule: Office Application Spawning a Script Interpreter or Shell (c708ae76-55b1-4654-bce2-0e91c8734490)
+DeviceProcessEvents
+| where (InitiatingProcessFolderPath endswith "\\WINWORD.EXE" or InitiatingProcessFolderPath endswith "\\EXCEL.EXE" or InitiatingProcessFolderPath endswith "\\POWERPNT.EXE" or InitiatingProcessFolderPath endswith "\\OUTLOOK.EXE" or InitiatingProcessFolderPath endswith "\\MSACCESS.EXE" or InitiatingProcessFolderPath endswith "\\MSPUB.EXE") and (FolderPath endswith "\\cmd.exe" or FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe" or FolderPath endswith "\\wscript.exe" or FolderPath endswith "\\cscript.exe" or FolderPath endswith "\\mshta.exe" or FolderPath endswith "\\rundll32.exe" or FolderPath endswith "\\regsvr32.exe")

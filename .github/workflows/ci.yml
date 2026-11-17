@@ -1,0 +1,38 @@
+name: detection-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint rule metadata (fields, UUIDs, ATT&CK mapping, schedules)
+        run: python tools/validate_rules.py
+
+      - name: Sigma -> KQL conversion is up to date
+        run: python tools/convert_sigma.py --check
+
+      - name: ATT&CK coverage report is up to date
+        run: python tools/coverage.py --check
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Offline playbook demo
+        run: python -m playbook.enrich samples/incident_mfa_fatigue.json --offline --no-llm

@@ -1,0 +1,58 @@
+{
+  "_comment": "Recorded-style answers for offline demos. Keys are matched against the request URL. Values are illustrative, not real intelligence.",
+  "ip_addresses/203.0.113.45": {
+    "data": {
+      "attributes": {
+        "last_analysis_stats": {
+          "malicious": 9,
+          "suspicious": 2,
+          "harmless": 50,
+          "undetected": 30
+        },
+        "reputation": -35,
+        "country": "NL",
+        "as_owner": "Example Bulletproof Hosting"
+      }
+    }
+  },
+  "ip_addresses/198.51.100.23": {
+    "data": {
+      "attributes": {
+        "last_analysis_stats": {
+          "malicious": 0,
+          "suspicious": 0,
+          "harmless": 60,
+          "undetected": 31
+        },
+        "reputation": 0,
+        "country": "ES",
+        "as_owner": "Example Mobile ISP"
+      }
+    }
+  },
+  "files/275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f": {
+    "data": {
+      "attributes": {
+        "last_analysis_stats": {
+          "malicious": 62,
+          "suspicious": 0,
+          "harmless": 0,
+          "undetected": 10
+        },
+        "meaningful_name": "eicar.com (EICAR anti-malware test file)"
+      }
+    }
+  },
+  "urls/aHR0cDovL2ludm9pY2VzLm1hbGljaW91cy5leGFtcGxlL2Rvd25sb2FkL3BheWxvYWQuYmlu": {
+    "data": {
+      "attributes": {
+        "last_analysis_stats": {
+          "malicious": 7,
+          "suspicious": 3,
+          "harmless": 55,
+          "undetected": 20
+        }
+      }
+    }
+  }
+}

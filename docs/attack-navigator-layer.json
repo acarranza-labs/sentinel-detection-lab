@@ -1,0 +1,104 @@
+{
+  "name": "sentinel-detection-lab coverage",
+  "versions": {
+    "layer": "4.5",
+    "navigator": "5.1.0"
+  },
+  "domain": "enterprise-attack",
+  "description": "Techniques with at least one rule in sentinel-detection-lab.",
+  "techniques": [
+    {
+      "techniqueID": "T1027.010",
+      "score": 1,
+      "comment": "PowerShell Launched With an Encoded Command",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059",
+      "score": 1,
+      "comment": "Office Application Spawning a Script Interpreter or Shell",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "score": 1,
+      "comment": "PowerShell Launched With an Encoded Command",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "score": 1,
+      "comment": "Certutil Used to Download or Decode a File",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "score": 1,
+      "comment": "Password Spray Against Entra ID From a Single IP",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1114.003",
+      "score": 1,
+      "comment": "Suspicious Inbox Rule - Forwarding or Hiding Mail (BEC)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "score": 1,
+      "comment": "Certutil Used to Download or Decode a File",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "score": 1,
+      "comment": "Office Application Spawning a Script Interpreter or Shell",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1490",
+      "score": 1,
+      "comment": "Volume Shadow Copy Deletion or Resize",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.008",
+      "score": 1,
+      "comment": "Suspicious Inbox Rule - Forwarding or Hiding Mail (BEC)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566.001",
+      "score": 1,
+      "comment": "Office Application Spawning a Script Interpreter or Shell",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566.003",
+      "score": 1,
+      "comment": "External Teams Chat Impersonating IT Support",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1621",
+      "score": 1,
+      "comment": "MFA Fatigue - Repeated MFA Denials Followed by a Successful Sign-in",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1656",
+      "score": 1,
+      "comment": "External Teams Chat Impersonating IT Support",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#c6dbef",
+      "#08519c"
+    ],
+    "minValue": 0,
+    "maxValue": 3
+  },
+  "legendItems": []
+}
